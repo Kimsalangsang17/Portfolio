@@ -17,16 +17,16 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  height: 100%;
   font-family: "Segoe UI", Helvetica, Arial, sans-serif;
   background: var(--bg);
   font-size: 62.5%;
 }
 
+
 body {
   position: relative;
   display: block;
-  overflow-x: hidden;
+  overflow-x: hidden;   
   background: var(--bg);
 }
 
@@ -101,26 +101,43 @@ body {
   margin: 20px 0 16px;  
 }
 
-.socials__github,
-.socials__email {
-  width: 42px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+.socials__github {
+  align-items: flex-end; 
+  padding-bottom: 2px;   
 }
 
-.socials__github img,
+.socials__github img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  object-position: bottom; 
+}
+
+.socials__email {
+  align-items: flex-end; 
+  padding-bottom: 2px;   
+}
+
 .socials__email img {
   width: 35px;
   height: 35px;
   object-fit: contain;
-  visibility: visible;
-  opacity: 1;
-  filter: brightness(0);.
+  object-position: bottom; 
+}
+
+.socials__github,
+.socials__email {
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.socials a:hover .socials__github,
+.socials a:hover .socials__email {
+  transform: translateY(-3px);
+}
+
+.socials a:hover .socials__github img,
+.socials a:hover .socials__email img {
+  filter: brightness(0) invert(1); 
 }
 
 .copyright {
@@ -722,31 +739,24 @@ body {
 }
 
 nav.navigation-bar {
-  position: relative;
+  position: sticky;
   top: 0;
-  margin-top: 0rem;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 6rem;
+  margin-top: 1rem; /* overlap look sa Home/About boundary */
   padding: 0 4rem;
   background-color: rgba(26, 26, 26, 0.82);
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
   z-index: 1000;
   border-bottom: 1px solid rgba(46, 44, 44, 0.08);
-  opacity: 0;
-  transform: translateY(-100%);
-  pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 nav.navigation-bar.navigation-bar--visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  pointer-events: auto;
+  margin-top: 0; /* gumagalaw papunta sa mismong itaas pag naka-scroll palayo sa Home */
 }
 
 .navigation {

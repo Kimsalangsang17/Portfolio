@@ -1,19 +1,46 @@
 (function () {
   const canvas = document.getElementById('net');
+  const heroEl = document.getElementById('hero');
 
-  if (!canvas) return;
+  if (!canvas || !heroEl) return;
 
   const ctx = canvas.getContext('2d');
   let w;
   let h;
   let dpr;
-  let particles = [];
-  let stars = [];
+
+  const colorDot = [
+    'rgb(81, 162, 233)',
+    'rgb(81, 162, 233)',
+    'rgb(81, 162, 233)',
+    'rgb(81, 162, 233)',
+    'rgb(255, 77, 90)'
+  ];
 
   const mouse = { x: -9999, y: -9999, active: false };
-  const linkDistance = 130;
-  const mouseLinkDistance = 180;
-  const mouseRepelDistance = 140;
+  let dotsConfig;
+  let dots = [];
+  let stars = [];
+
+  function getDotsConfig(windowSize) {
+    if (windowSize > 1600) return { nb: 220, distance: 70, d_radius: 300 };
+    if (windowSize > 1300) return { nb: 190, distance: 60, d_radius: 280 };
+    if (windowSize > 1100) return { nb: 160, distance: 55, d_radius: 250 };
+    if (windowSize > 800) return { nb: 110, distance: 0, d_radius: 0 };
+    if (windowSize > 600) return { nb: 80, distance: 0, d_radius: 0 };
+    return { nb: 50, distance: 0, d_radius: 0 };
+  }
+
+  function makeDot(isFirst) {
+    return {
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: -0.5 + Math.random(),
+      vy: -0.5 + Math.random(),
+      radius: isFirst ? 1.5 : Math.random() * 1.5,
+      colour: isFirst ? 'rgb(81, 162, 233)' : colorDot[Math.floor(Math.random() * colorDot.length)]
+    };
+  }
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -24,22 +51,70 @@
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    initParticles();
+
+    dotsConfig = getDotsConfig(window.innerWidth);
+    dots = [];
+    for (let i = 0; i < dotsConfig.nb; i++) {
+      dots.push(makeDot(i === 0));
+    }
+
+    mouse.x = w / 2;
+    mouse.y = h / 2;
   }
 
-  function initParticles() {
-    const area = w * h;
-    const count = Math.min(140, Math.max(50, Math.round(area / 14000)));
-    particles = [];
+  function drawDot(dot) {
+    ctx.beginPath();
+    ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2, false);
 
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: Math.random() * 1.6 + 0.6
-      });
+    const dotDistance = Math.hypot(dot.x - mouse.x, dot.y - mouse.y);
+    const distanceRatio = dotDistance / (window.innerWidth / 1.7);
+    const alpha = Math.max(0, 1 - distanceRatio);
+
+    ctx.fillStyle = dot.colour.slice(0, -1) + `,${alpha})`;
+    ctx.fill();
+  }
+
+  function updateDots() {
+    for (let i = 1; i < dots.length; i++) {
+      const dot = dots[i];
+
+      if (dot.y < 0 || dot.y > h) dot.vy = -dot.vy;
+      if (dot.x < 0 || dot.x > w) dot.vx = -dot.vx;
+
+      dot.x += dot.vx;
+      dot.y += dot.vy;
+    }
+
+    dots[0].x = mouse.x;
+    dots[0].y = mouse.y;
+  }
+
+  function drawLines() {
+    if (!dotsConfig.distance) return;
+
+    for (let i = 0; i < dots.length; i++) {
+      for (let j = i + 1; j < dots.length; j++) {
+        const a = dots[i];
+        const b = dots[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+
+        if (Math.abs(dx) < dotsConfig.distance && Math.abs(dy) < dotsConfig.distance) {
+          const distFromMouse = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+
+          if (distFromMouse < dotsConfig.d_radius) {
+            let ratio = distFromMouse / dotsConfig.d_radius - 0.3;
+            if (ratio < 0) ratio = 0;
+
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.lineWidth = 0.3;
+            ctx.strokeStyle = `rgba(81, 162, 233, ${1 - ratio})`;
+            ctx.stroke();
+          }
+        }
+      }
     }
   }
 
@@ -48,7 +123,7 @@
 
     for (let i = 0; i < spawnCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 140;
+      const radius = Math.random() * 30;
       stars.push({
         x: mouse.x + Math.cos(angle) * radius,
         y: mouse.y + Math.sin(angle) * radius,
@@ -56,16 +131,14 @@
         tw: Math.random() * Math.PI * 2,
         speed: 0.02 + Math.random() * 0.03,
         life: 1,
-        decay: 0.004 + Math.random() * 0.006,
+        decay: 0.02 + Math.random() * 0.02,
         hue: Math.random() < 0.15
-          ? 'rgba(240,104,126,'
-          : Math.random() < 0.5
-            ? 'rgba(255,255,255,'
-            : 'rgba(120,170,220,'
+          ? 'rgba(255,77,90,'
+          : 'rgba(81,162,233,'
       });
     }
 
-    if (stars.length > 400) stars.splice(0, stars.length - 400);
+    if (stars.length > 200) stars.splice(0, stars.length - 200);
   }
 
   function drawStars() {
@@ -81,6 +154,7 @@
 
       const twinkle = 0.5 + Math.sin(star.tw) * 0.5;
       const alpha = star.life * twinkle;
+
       ctx.beginPath();
       ctx.fillStyle = `${star.hue}${Math.max(0, alpha).toFixed(2)})`;
       ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
@@ -88,101 +162,109 @@
     }
   }
 
-  function updateMouse(x, y) {
-    mouse.x = x;
-    mouse.y = y;
-    mouse.active = true;
-    spawnStarsAtCursor();
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+
+    updateDots();
+    drawLines();
+    dots.forEach(drawDot);
+    drawStars();
+
+    requestAnimationFrame(frame);
   }
 
-  window.addEventListener('mousemove', (event) => {
-    updateMouse(event.clientX, event.clientY);
+  heroEl.addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+    mouse.active = true;
+    spawnStarsAtCursor();
   });
 
-  window.addEventListener('mouseleave', () => {
+  heroEl.addEventListener('mouseleave', () => {
     mouse.active = false;
   });
 
-  window.addEventListener('touchmove', (event) => {
+  heroEl.addEventListener('touchmove', (event) => {
     if (event.touches[0]) {
-      updateMouse(event.touches[0].clientX, event.touches[0].clientY);
+      mouse.x = event.touches[0].clientX;
+      mouse.y = event.touches[0].clientY;
+      spawnStarsAtCursor();
     }
   }, { passive: true });
 
-  window.addEventListener('touchend', () => {
-    mouse.active = false;
-  });
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(frame);
+})();
+
+(function () {
+  const canvas = document.querySelector('.canvas-2');
+  const wrapper = document.querySelector('.bg-wrapper');
+
+  if (!canvas || !wrapper) return;
+
+  const ctx = canvas.getContext('2d');
+  const colorDot = [
+    'rgb(81, 162, 233)',
+    'rgb(81, 162, 233)',
+    'rgb(81, 162, 233)',
+    'rgb(255, 77, 90)'
+  ];
+
+  let dots = [];
+  let dotsCount;
+
+  function getDotsCount(windowSize) {
+    if (windowSize > 1600) return 100;
+    if (windowSize > 1300) return 75;
+    if (windowSize > 1100) return 50;
+    return 0;
+  }
+
+  function makeDot() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: -0.5 + Math.random(),
+      vy: -0.5 + Math.random(),
+      radius: Math.random() * 1.5,
+      colour: colorDot[Math.floor(Math.random() * colorDot.length)]
+    };
+  }
+
+  function resize() {
+    canvas.width = wrapper.scrollWidth;
+    canvas.height = wrapper.scrollHeight;
+
+    dotsCount = getDotsCount(window.innerWidth);
+    dots = [];
+    for (let i = 0; i < dotsCount; i++) {
+      dots.push(makeDot());
+    }
+  }
+
+  function drawDot(dot) {
+    ctx.beginPath();
+    ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = dot.colour.slice(0, -1) + ',0.6)';
+    ctx.fill();
+  }
+
+  function updateDots() {
+    for (const dot of dots) {
+      if (dot.y < 0 || dot.y > canvas.height) dot.vy = -dot.vy;
+      if (dot.x < 0 || dot.x > canvas.width) dot.vx = -dot.vx;
+
+      dot.x += dot.vx;
+      dot.y += dot.vy;
+    }
+  }
 
   function frame() {
-    ctx.clearRect(0, 0, w, h);
-    drawStars();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (const particle of particles) {
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-
-      if (particle.x < 0 || particle.x > w) particle.vx *= -1;
-      if (particle.y < 0 || particle.y > h) particle.vy *= -1;
-
-      if (mouse.active) {
-        const dx = particle.x - mouse.x;
-        const dy = particle.y - mouse.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < mouseRepelDistance && distance > 0.01) {
-          const force = (mouseRepelDistance - distance) / mouseRepelDistance;
-          particle.x += (dx / distance) * force * 1.6;
-          particle.y += (dy / distance) * force * 1.6;
-        }
-      }
-    }
-
-    ctx.lineWidth = 1;
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const first = particles[i];
-        const second = particles[j];
-        const distance = Math.hypot(first.x - second.x, first.y - second.y);
-
-        if (distance < linkDistance) {
-          ctx.strokeStyle = `rgba(111,168,220,${(1 - distance / linkDistance) * 0.35})`;
-          ctx.beginPath();
-          ctx.moveTo(first.x, first.y);
-          ctx.lineTo(second.x, second.y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    if (mouse.active) {
-      for (const particle of particles) {
-        const distance = Math.hypot(particle.x - mouse.x, particle.y - mouse.y);
-
-        if (distance < mouseLinkDistance) {
-          ctx.strokeStyle = `rgba(240,104,126,${(1 - distance / mouseLinkDistance) * 0.55})`;
-          ctx.beginPath();
-          ctx.moveTo(mouse.x, mouse.y);
-          ctx.lineTo(particle.x, particle.y);
-          ctx.stroke();
-        }
-      }
-
-      const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 8);
-      gradient.addColorStop(0, 'rgba(17, 7, 9, 0.9)');
-      gradient.addColorStop(1, 'rgba(240,104,126,0)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(mouse.x, mouse.y, 8, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    for (const particle of particles) {
-      ctx.beginPath();
-      ctx.fillStyle = 'rgba(140,190,235,0.85)';
-      ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    updateDots();
+    dots.forEach(drawDot);
 
     requestAnimationFrame(frame);
   }
@@ -196,7 +278,6 @@ const aboutLink = document.querySelector('a.heading__link[href="#about"]');
 const navigationBar = document.querySelector('.navigation-bar');
 const heroSection = document.querySelector('#hero');
 
-// --- Nav bar visibility: passive but always shown once past Home ---
 if (navigationBar && heroSection) {
   const navVisibilityObserver = new IntersectionObserver(
     (entries) => {
@@ -210,7 +291,6 @@ if (navigationBar && heroSection) {
   navVisibilityObserver.observe(heroSection);
 }
 
-// --- Active nav link highlighting: IntersectionObserver-based (no longer scrollY-dependent) ---
 const navigationLinks = [...document.querySelectorAll('.navigation__item a')];
 const sectionLinks = navigationLinks
   .map((link) => ({
@@ -228,16 +308,13 @@ function setActiveNavigationLink(activeSection) {
 if (sectionLinks.length) {
   const activeSectionObserver = new IntersectionObserver(
     (entries) => {
-      // pick the entry most visible in the viewport right now
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-      if (visible) {
-        setActiveNavigationLink(visible.target);
-      }
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveNavigationLink(entry.target);
+        }
+      });
     },
-    { threshold: [0.25, 0.5, 0.75], rootMargin: '-30% 0px -30% 0px' }
+    { threshold: 0, rootMargin: '-45% 0px -45% 0px' }
   );
 
   sectionLinks.forEach(({ section }) => activeSectionObserver.observe(section));
