@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-
 
 :root {
   --bg: #010102;
@@ -54,6 +52,89 @@ body {
   padding: 0 20px;
   max-width: 1200px;
 }
+:root {
+  --accent: #f0687e;
+  --footer-bg: #2b2b2b;
+}
+
+.footer {
+  position: relative;
+  background-color: var(--footer-bg);
+  padding: 35px 20px 20px;  
+  text-align: center;
+}
+
+.footer > a:first-child {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  text-decoration: none;
+}
+
+.return-home {
+  width: 50px;
+  height: 50px;
+  background-color: #d41431;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.return-home svg {
+  width: 40px;
+  height: 36px;
+}
+
+.footer > a:first-child:hover .return-home {
+  background-color: #d41431;
+  transform: translateY(-3px);
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  visibility:  visible;
+  margin: 20px 0 16px;  
+}
+
+.socials__github,
+.socials__email {
+  width: 42px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.socials__github img,
+.socials__email img {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+  visibility: visible;
+  opacity: 1;
+  filter: brightness(0);.
+}
+
+.copyright {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #4facfe, #f3eff0, #ffd36e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 
 .heading__line-1,
 .heading__line-2 {
