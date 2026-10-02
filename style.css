@@ -209,7 +209,6 @@ body {
   width: 27.5rem;
   height: 4.8rem;
 
-  /* Transparent button - no solid background */
   background: transparent;
 
   border: 2px solid #ee0818;
@@ -230,10 +229,6 @@ body {
     box-shadow 0.3s ease;
 }
 
-
-/* =========================
-   ENTRANCE ANIMATION
-   ========================= */
 
 @keyframes moveInBottom {
   0% {
@@ -317,11 +312,6 @@ body {
         order: 2;
     }
 }
-/* =========================
-   GLOW BOX 1
-   Hidden by default
-   ========================= */
-
 .heading-cta::before {
   content: "";
   position: absolute;
@@ -344,11 +334,6 @@ body {
     box-shadow 0.5s ease;
 }
 
-
-/* =========================
-   GLOW BOX 2
-   Hidden by default
-   ========================= */
 
 .heading-cta::after {
   content: "";
@@ -417,10 +402,6 @@ body {
 }
 
 
-/* =========================
-   RESPONSIVE
-   ========================= */
-
 @media (max-width: 1500px) {
   .heading-cta {
     width: auto;
@@ -439,10 +420,6 @@ body {
   }
 }
 
-
-/* =========================
-   ARROW
-   ========================= */
 
 .heading__arrow {
   display: inline-block;
@@ -463,7 +440,6 @@ body {
 }
 
 
-/* Arrow glows only on hover */
 .heading-cta:hover .heading__arrow {
   filter:
     drop-shadow(0 0 5px #ff4d5a)
@@ -577,6 +553,13 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center
+}
+
+.contact__form-status {
+  min-height: 2rem;
+  margin: 0.8rem 0 0;
+  color: var(--muted);
+  font-size: 1.4rem;
 }
 
 .contact__form-name,.contact__form-email {
@@ -767,7 +750,6 @@ nav.navigation-bar.navigation-bar--visible {
   transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
-/* Hide navbar when scrolling down */
 .navigation.navigation--hidden {
   transform: translateY(-120%);
   opacity: 0;
@@ -859,10 +841,6 @@ nav.navigation-bar.navigation-bar--visible {
   z-index: -1;
 }
 
-/* =========================
-   ABOUT CONTENT
-========================= */
-
 .about__content {
   display: flex;
   flex-direction: column;
@@ -874,10 +852,6 @@ nav.navigation-bar.navigation-bar--visible {
 }
 
 
-/* =========================
-   ABOUT LAYOUT
-========================= */
-
 .about-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
@@ -887,10 +861,6 @@ nav.navigation-bar.navigation-bar--visible {
   margin-left: -3rem;
 }
 
-
-/* =========================
-   PROFILE
-========================= */
 
 .profile {
   position: relative;
@@ -925,10 +895,6 @@ nav.navigation-bar.navigation-bar--visible {
   }
 }
 
-
-/* =========================
-   PROFILE PICTURE
-========================= */
 
 .profile__picture {
   width: 200px;
@@ -984,19 +950,11 @@ nav.navigation-bar.navigation-bar--visible {
 }
 
 
-/* =========================
-   FADE IN
-========================= */
-
 .profile__fade-in {
   opacity: 1;
   transform: none;
 }
 
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 900px) {
   .about-layout {
@@ -1367,8 +1325,8 @@ nav.navigation-bar.navigation-bar--visible {
   position: relative;
   z-index: 1;
   margin: 0 0 3rem;
-  margin-top: 3.5rem;
-  font-size: 2.4rem;
+  margin-top: 3.8rem;
+  font-size: 2.7rem;
   font-weight: 450px;
   text-align: center;
   color: var(--text);
@@ -1381,7 +1339,7 @@ nav.navigation-bar.navigation-bar--visible {
 
 .timeline__item {
   position: relative;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .timeline__item:last-child {
@@ -1408,7 +1366,7 @@ nav.navigation-bar.navigation-bar--visible {
 .timeline__card,
 .cert {
   padding: 2rem;
-  background: #1a1a1a;
+  background: #3d3a3a;
   border: 1px solid rgba(255, 77, 90, 0.45);
   border-radius: 10px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
@@ -1423,7 +1381,7 @@ nav.navigation-bar.navigation-bar--visible {
 }
 
 .timeline__date {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
   letter-spacing: 1px;
@@ -1435,7 +1393,7 @@ nav.navigation-bar.navigation-bar--visible {
 .timeline__org,
 .cert__issuer {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: var(--muted);
 }
 
@@ -1472,7 +1430,6 @@ nav.navigation-bar.navigation-bar--visible {
   }
 }
 
-/* ── Grid of cards ── */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1483,7 +1440,6 @@ nav.navigation-bar.navigation-bar--visible {
     z-index: 1;
   }
 
-  /* ── Base card ── */
   .glass-card {
     position: relative;
     border-radius: 24px;
@@ -1532,7 +1488,6 @@ nav.navigation-bar.navigation-bar--visible {
     to { --angle: 360deg; }
   }
 
-  /* ── Glow spot that follows hover ── */
   .glass-card::after {
     content: '';
     position: absolute;
@@ -1550,7 +1505,6 @@ nav.navigation-bar.navigation-bar--visible {
   }
   .glass-card:hover::after { opacity: .15; }
 
-  /* ── Card colour themes ── */
   .card-cyan   { --glow1: var(--cyan);   --glow2: var(--purple); }
   .card-pink   { --glow1: var(--pink);   --glow2: var(--purple); }
   .card-purple { --glow1: var(--purple); --glow2: var(--cyan);   }
@@ -1559,7 +1513,6 @@ nav.navigation-bar.navigation-bar--visible {
   .card-pink:hover   { box-shadow: 0 20px 60px rgba(255,45,120,.2),  0 0 0 1px rgba(255,45,120,.1); }
   .card-purple:hover { box-shadow: 0 20px 60px rgba(191,95,255,.2),  0 0 0 1px rgba(191,95,255,.1); }
 
-  /* ── Card icon ── */
   .card-icon {
     width: 52px;
     height: 52px;
@@ -1576,7 +1529,6 @@ nav.navigation-bar.navigation-bar--visible {
   .card-pink   .card-icon { background: rgba(255,45,120,.1);  border: 1px solid rgba(255,45,120,.2); }
   .card-purple .card-icon { background: rgba(191,95,255,.1);  border: 1px solid rgba(191,95,255,.2); }
 
-  /* ── Card content ── */
   .card-label {
     font-size: 11px;
     font-weight: 600;
@@ -1610,7 +1562,6 @@ nav.navigation-bar.navigation-bar--visible {
     text-indent: 2rem;
   }
 
-  /* ── Stats row ── */
   .card-stats {
     display: flex;
     gap: 20px;
@@ -1632,7 +1583,6 @@ nav.navigation-bar.navigation-bar--visible {
     letter-spacing: 2px;
   }
 
-  /* ── CTA button ── */
   .card-btn {
   display: inline-flex;
   align-items: center;
@@ -1665,6 +1615,19 @@ nav.navigation-bar.navigation-bar--visible {
 a {
   text-decoration: none;
 }
+
+.project__tech {
+  margin: 0.75rem 0 0;
+  color: var(--muted); 
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.project__tech strong {
+  color: var(--project-accent);
+  font-weight: 500;
+}
+
 
 .projects {
   display: flex;
@@ -1716,7 +1679,7 @@ a {
   height: 70rem;
   width: 100rem;
   max-width: 70vw;
-  background-color: var(--card-bg);
+  background-color: rgba(0, 245, 255, 0.07);
   transition: transform 0.2s ease;
   cursor: pointer;
   overflow: hidden;
@@ -1739,7 +1702,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background-color: var(--card-bg);
+  background-color: rgba(0, 245, 255, 0.07);
 }
 
 .project-right .project__image-container {
@@ -1750,7 +1713,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background-color: var(--card-bg);
+  background-color: rgba(0, 245, 255, 0.07);
 }
 
 .project-right .project__image-container .project__image-image {
@@ -1827,57 +1790,6 @@ a {
   object-fit: contain;
 }
 
-.project-carousel__button {
-  position: absolute;
-  top: 50%;
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-  background: rgba(3, 12, 9, 0.72);
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-.project-carousel__button:hover {
-  background: rgba(64, 164, 255, 0.85);
-}
-
-.project-carousel__button--prev {
-  left: 1.5rem;
-}
-
-.project-carousel__button--next {
-  right: 1.5rem;
-}
-
-.project-carousel__dots {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  display: flex;
-  gap: 0.7rem;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-
-.project-carousel__dot {
-  width: 0.9rem;
-  height: 0.9rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.45);
-  cursor: pointer;
-}
-
-.project-carousel__dot--active {
-  background: #4da6ff;
-}
-
 @keyframes starbucksFloat {
   0%,
   100% {
@@ -1909,7 +1821,8 @@ a {
   position: relative;
   margin-top: 3rem;
   max-width: 34rem;
- text-align: justify;
+text-indent: 2rem;
+  text-align: justify;
   font-size: 1.8rem;
   font-weight: 500;
   line-height: 1.6;
@@ -2152,6 +2065,11 @@ a {
 
 .timeline__card:hover {
   border-color: rgba(0, 245, 255, 0.45);
+}
+
+.timeline__card,
+.certs__cards .glass-card {
+  background: rgba(0, 245, 255, 0.07);
 }
 
 .certs__cards .glass-card {

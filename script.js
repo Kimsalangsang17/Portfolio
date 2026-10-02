@@ -355,3 +355,40 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
   showSlide(0);
   window.setInterval(() => showSlide(activeIndex + 1), 3000);
 });
+
+const contactForm = document.querySelector('.contact__form');
+
+if (contactForm) {
+  const submitButton = contactForm.querySelector('#form-submit');
+  const formStatus = contactForm.querySelector('.contact__form-status');
+
+  contactForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+    }
+    if (formStatus) formStatus.textContent = '';
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { Accept: 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('Form submission failed.');
+
+      contactForm.reset();
+      if (formStatus) formStatus.textContent = 'Your message has been sent.';
+    } catch {
+      if (formStatus) formStatus.textContent = 'Could not send your message. Please try again.';
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit';
+      }
+    }
+  });
+}
