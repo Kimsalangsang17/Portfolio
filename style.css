@@ -9,8 +9,8 @@
   --cyan:   #00f5ff;
   --pink:   #ff2d78;
   --purple: #bf5fff;
-  --card-bg: rgba(255,255,255,0.04);
-  --card-border: rgba(255,255,255,0.1);
+  --card-bg: rgba(83, 82, 82, 0.04);
+  --card-border: rgba(46, 44, 44, 0.1);
 }
 
 * {
@@ -1640,7 +1640,7 @@ nav.navigation-bar.navigation-bar--visible {
   padding: 7px 10px;      
   border-radius: 50px;
   font-family: 'Outfit', sans-serif;
-  font-size: 11px;        /* dating 12px */
+  font-size: 11px;        
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -1716,7 +1716,7 @@ a {
   height: 70rem;
   width: 100rem;
   max-width: 70vw;
-  background-color: #3216bb;
+  background-color: var(--card-bg);
   transition: transform 0.2s ease;
   cursor: pointer;
   overflow: hidden;
@@ -1739,7 +1739,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background-color: #3a4e44;
+  background-color: var(--card-bg);
 }
 
 .project-right .project__image-container {
@@ -1750,7 +1750,7 @@ a {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background-color: #3a4e44;
+  background-color: var(--card-bg);
 }
 
 .project-right .project__image-container .project__image-image {
